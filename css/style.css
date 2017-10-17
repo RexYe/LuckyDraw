@@ -1,0 +1,30 @@
+@charset "utf-8";
+body, div, h1{margin: 0;}
+body {font-family:"Microsoft Yahei",Arial,Helvetica,sans-serif; font-size: 12px; text-align: center; color: #fff;}
+*{-webkit-box-sizing:border-box; -moz-box-sizing:border-box; box-sizing: border-box;}
+body{background-color: #883c40;}
+h1{height:135px; font-size: 0; background: url("../images/title.png") no-repeat center center;}
+.wrap-bg{width:910px;height:800px; padding:45px 0 0 40px; margin: 0 auto; background: url("../images/bg1.jpg") no-repeat; -webkit-animation:changeBg .6s linear 0s normal none infinite; animation:changeBg .6s linear 0s normal none infinite;}
+.wrap{width:831px;height:702px; position: relative; }
+.wrap>div{width:277px; height:234px; position: absolute; background: url("../images/item-bg1.png") no-repeat;}
+.wrap>div img{position: relative; z-index: 10;}
+.wrap>div.btn-begin{left:277px; top:234px; font-size: 0; background: url("../images/btn-begin.png") no-repeat; cursor: pointer;}
+.wrap>div.btn-begin:active{height:232px;top:236px; border-radius: 0 0 20px 20px;}
+.wrap>div.Highlight:before,.wrap>div.Selected:before{content:"";position: absolute; top:0; left:0; right:0; bottom:0; display: block; background: url("../images/item-bg2.png") no-repeat;}
+.wrap>div.Selected:before{ -webkit-animation: myShow 1.5s linear; animation: myShow 1.5s linear;}
+/* 背景闪烁灯光动画 ie 与 火狐不支持  */
+@-webkit-keyframes changeBg{from{background: url("../images/bg1.jpg") no-repeat;} to{background: url("../images/bg2.jpg") no-repeat;}}
+@keyframes changeBg{from{background: url("../images/bg1.jpg") no-repeat;} to{background: url("../images/bg2.jpg") no-repeat;}}
+/* 中奖选项动画 */
+@-webkit-keyframes myShow{0% {-webkit-transform: skew(10deg, 10deg);}  25%{-webkit-transform:skew(-10deg, -10deg);}  50%{-webkit-transform:skew(5deg, 5deg);} 70%{-webkit-transform:skew(-5deg, -5deg);} 85%{-webkit-transform:skew(3deg, 3deg);}  100%{-webkit-transform:skew(0deg, 0deg);}}
+@keyframes myShow{0% {transform: skew(10deg, 10deg);}  25%{transform:skew(-10deg, -10deg);}  50%{transform:skew(5deg, 5deg);} 70%{transform:skew(-5deg, -5deg);} 85%{transform:skew(3deg, 3deg);}  100%{transform:skew(0deg, 0deg);}}
+
+/*定位 */
+.item1{left:0; top:0;}
+.item2{left:277px; top:0;}
+.item3{left:554px; top:0;}
+.item4{left:554px; top:234px;}
+.item5{left:554px; top:468px;}
+.item6{left:277px; top:468px;}
+.item7{left:0; top:468px;}
+.item8{left:0; top:234px;}
