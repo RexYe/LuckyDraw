@@ -36,13 +36,9 @@ function LuckyDraw(o) {
 		let timer = setInterval( () => {
 			this.addStyle(this.no);//添加高亮
 			this.clearStyle(this.no);//去除高亮
-			if(this.no>8){
-				this.no = 0;
-				this.o.round += 1;
-			}
-			this.no++;
 		},this.o.speed)
-		this.step ++;
+		this.step ++;//步数+1
+		this.no = step%8;
 	}
 	this.endMove = function(){
 		clearInterval(timer);
@@ -94,7 +90,9 @@ function LuckyDraw(o) {
      **/
 	this.init = function(){
 		this.getRandom();
-		console.log(this.chooseIndex)
+		let timer = setInterval( () => {
+			this.move();
+		},this.o.speed)
 	}
 
 }
