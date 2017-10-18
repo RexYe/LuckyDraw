@@ -66,19 +66,15 @@ function LuckyDraw(o) {
 		let ran = Math.floor(Math.random()*this.o.sum);
 		if(ran<1){
 			return this.chooseIndex = 2;//一等奖(1)
-			alert(1)
 		}
 		if(ran>0 && ran<3){
 			return this.chooseIndex = 4;//二等奖(2)
-			alert(2)
  		}
 		else if(ran>2 && ran<8){
 			return this.chooseIndex = 6;//三等奖(5)
-			alert(3)
 		}
 		else if(ran>7 && ran<18){
 			return this.chooseIndex = 8;//四等奖(10)
-			alert(4)
 		}
 		else{
 			let ran2 = Math.ceil(Math.random()*7);
@@ -88,7 +84,7 @@ function LuckyDraw(o) {
 			if(ran2>7){
 				ran2 -= 1;
 			}
-			let noprize = ran2;
+			let noprize = ran2;//位置1 3 5 7均为未中奖
 			return this.chooseIndex = noprize;
 		}
 	}
@@ -96,13 +92,7 @@ function LuckyDraw(o) {
 		this.addStyle(this.no);//添加高亮
 		this.clearStyle(this.no);//去除高亮
 		this.step ++;//步数+1
-		// if(this.step%8 == 0){
-		// 	this.no = 1;
-		// }
 		(this.step%8 == 0) ? this.no = 1 : this.no = this.step%8+1;
-		// else{
-		// 	this.no = this.step%8+1;
-		// }
 		console.log(this.step)
 		if(this.step == this.quickerIndex){
 			clearInterval(this.timer);
@@ -120,20 +110,22 @@ function LuckyDraw(o) {
 		}
 		if(this.step == this.stepAll){
 			this.step = 0;
+			this.no = 1;
 			clearInterval(this.timer);
 			this.clearStyle(this.no);
 			this.chooseStyle(this.chooseIndex);
 			console.log($('.item'+this.chooseIndex).attr('title'));
 			this.flag = true;
 			$('.btn-begin').css("cursor","pointer")
+			$('.btn-begin').css("background-image","url(images/btn-begin.png)")
 		}
 	}
 	 /**
      *@function : 初始化函数
      **/
 	this.init = function(){
-		this.flag = false;
 		this.clearChooseStyle(this.chooseIndex);
+		this.clearStyle(this.chooseIndex);
 		this.getRandom();
 		this.stepAll = this.chooseIndex+this.o.round*8; //计算总步数
 		console.log('stepAll',this.stepAll);
@@ -141,19 +133,28 @@ function LuckyDraw(o) {
 		this.timer = setInterval( () => {
 			this.move();
 		},this.o.speed)
+		this.o.sum -- ;
 	}
 	//开始抽奖
 	this.begin = function(){
         if(this.o.chance < 1){
-            alert('抽奖机会已用完！');
+            console.log('抽奖机会已用完！');
+            $('.btn-begin').css("cursor","not-allowed")
+	        $('.btn-begin').css("background-image","url(images/btn-begin-grey.png)")//抽奖按钮变灰
         }
         else{
         	if(this.flag == false){
-            	$('.btn-begin').css("cursor","pointer")
+				$('.btn-begin').live('click', function(event) {
+				  	alert("抱歉,已停用！");
+				   	event.preventDefault();
+				});
+				throw new Error;
 	        }
 	        if(this.flag == true){
+	        	this.flag = false;
 	        	luckyDraw.init();
-	        	$('.btn-begin').css("cursor","wait")
+	        	$('.btn-begin').css("cursor","not-allowed")
+	        	$('.btn-begin').css("background-image","url(images/btn-begin-grey.png)")//抽奖按钮变灰	        	this.flag = false;
 	        }
 	        this.o.chance --;
         }
@@ -166,6 +167,3 @@ function LuckyDraw(o) {
 	}
 }
 inherit(LuckyDraw, Block);
-
-
-
