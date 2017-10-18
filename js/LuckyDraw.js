@@ -15,9 +15,6 @@ function inherit(proto) {
 function Block() {
 	this.text = "";//文字内容
 }
-Block.prototype.showResult = function() {
-	alert('prize');
-}
 function LuckyDraw(o) {
 	this.o = {
 		round: o.round,//圈数
@@ -36,18 +33,11 @@ function LuckyDraw(o) {
 	this.timer = null;//
 	// Block.call(this);
 	this.success = function(){}//成功后回调函数
-	this.endMove = function(){
-		clearInterval(timer);
-	}
-	this.setSpeed = function(no){
-		if(no>8){
-			this.o.speed = 100;
-			// console.log(no)
-		}
-	}
+	//高亮状态
 	this.addStyle = function(no){
 		$('.item'+no).addClass('Highlight');
 	}
+	//清除高亮状态
 	this.clearStyle = function(no){
 		if(no == 1){
 			$('.item'+8).removeClass('Highlight');
@@ -56,23 +46,27 @@ function LuckyDraw(o) {
 			$('.item'+(no-1)).removeClass('Highlight');
 		}
 	}
+	//中奖选中状态
 	this.chooseStyle = function(chooseIndex){
 		$('.item'+chooseIndex).addClass('Selected');
 	}
+	//清除中奖选中状态
 	this.clearChooseStyle = function(chooseIndex){
 		$('.item'+chooseIndex).removeClass('Selected');
 		$('.item'+chooseIndex).stop();
 	}
+	//抽奖期间样式变灰状态
 	this.endStyle = function(){
 		 $('.btn-begin').css("cursor","not-allowed")
 	     $('.btn-begin').css("background-image","url(images/btn-begin-grey.png)")//抽奖按钮变灰
 	}
+	//随机算法，其概率根据输入的基数计算
 	this.getRandom = function(){
 		let ran = Math.floor(Math.random()*this.o.sum);
 		if(ran<1){
 			return this.chooseIndex = 2;//一等奖(1)
 		}
-		if(ran>0 && ran<3){
+		else if(ran>0 && ran<3){
 			return this.chooseIndex = 4;//二等奖(2)
  		}
 		else if(ran>2 && ran<8){
@@ -82,6 +76,7 @@ function LuckyDraw(o) {
 			return this.chooseIndex = 8;//四等奖(10)
 		}
 		else{
+			//随机产生1 3 5 7
 			let ran2 = Math.ceil(Math.random()*7);
 			if(ran2%2 === 0){
 				ran2 += 1;
@@ -93,13 +88,14 @@ function LuckyDraw(o) {
 			return this.chooseIndex = noprize;
 		}
 	}
+	//抽奖过程动态效果
 	this.move = function() {
 		this.addStyle(this.no);//添加高亮
 		this.clearStyle(this.no);//去除高亮
 		this.step ++;//步数+1
 		(this.step%8 == 0) ? this.no = 1 : this.no = this.step%8+1;
-		// console.log(this.step)
-		console.log(this.no);
+		// console.log(this.no);
+		//在用户输入变快的地方变快
 		if(this.step == this.quickerIndex){
 			clearInterval(this.timer);
 			this.o.speed /= 2;
