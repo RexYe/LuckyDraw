@@ -21,7 +21,10 @@ function LuckyDraw(o) {
 		sum: o.sum, //总份数
 		speed: o.speed,//初始速度
 		chance: o.chance,//抽奖机会数
-		index: o.index,//初始位置
+		firstPrize: o.firstPrize,
+		secondPrize: o.secondPrize,
+		thirdPrize: o.thirdPrize,
+		fourthPrize: o.fourthPrize,
 	};
 	this.flag = true;//结束转动标志
 	this.chooseIndex = 3;//获奖位置编号，随机产生
@@ -63,16 +66,16 @@ function LuckyDraw(o) {
 	//随机算法，其概率根据输入的基数计算
 	this.getRandom = function(){
 		let ran = Math.floor(Math.random()*this.o.sum);
-		if(ran<1){
+		if(ran<this.o.firstPrize){
 			return this.chooseIndex = 2;//一等奖(1)
 		}
-		else if(ran>0 && ran<3){
+		else if(ran>this.o.firstPrize-1 && ran<this.o.firstPrize+this.o.secondPrize){
 			return this.chooseIndex = 4;//二等奖(2)
  		}
-		else if(ran>2 && ran<8){
+		else if(ran>this.o.firstPrize+this.o.secondPrize-1 && ran<this.o.firstPrize+this.o.secondPrize+this.o.thirdPrize){
 			return this.chooseIndex = 6;//三等奖(5)
 		}
-		else if(ran>7 && ran<18){
+		else if(ran>this.o.firstPrize+this.o.secondPrize+this.o.thirdPrize-1 && ran<this.o.firstPrize+this.o.secondPrize+this.o.thirdPrize+this.o.fourthPrize){
 			return this.chooseIndex = 8;//四等奖(10)
 		}
 		else{
@@ -111,6 +114,19 @@ function LuckyDraw(o) {
 			},this.o.speed)
 		}
 		if(this.step == this.stepAll){
+			if(this.chooseIndex==2){
+				this.o.firstPrize --;
+			}
+			if(this.chooseIndex==4){
+				this.o.secondPrize --;
+			}
+			if(this.chooseIndex == 6){
+				this.o.thirdPrize --;
+			}
+			if(this.chooseIndex == 8){
+				this.o.fourthPrize --;
+			}
+			console.log(this.o)
 			this.step = 0;
 			this.no = 1;
 			clearInterval(this.timer);
@@ -128,6 +144,7 @@ function LuckyDraw(o) {
      **/
 	this.init = function(){
 		this.clearChooseStyle(this.chooseIndex);
+		this.clearStyle(this.chooseIndex+1);
 		this.clearStyle(this.chooseIndex);
 		this.getRandom();
 		this.stepAll = this.chooseIndex+this.o.round*8; //计算总步数
