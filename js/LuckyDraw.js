@@ -61,6 +61,11 @@ function LuckyDraw(o) {
 	}
 	this.clearChooseStyle = function(chooseIndex){
 		$('.item'+chooseIndex).removeClass('Selected');
+		$('.item'+chooseIndex).stop();
+	}
+	this.endStyle = function(){
+		 $('.btn-begin').css("cursor","not-allowed")
+	     $('.btn-begin').css("background-image","url(images/btn-begin-grey.png)")//抽奖按钮变灰
 	}
 	this.getRandom = function(){
 		let ran = Math.floor(Math.random()*this.o.sum);
@@ -93,7 +98,8 @@ function LuckyDraw(o) {
 		this.clearStyle(this.no);//去除高亮
 		this.step ++;//步数+1
 		(this.step%8 == 0) ? this.no = 1 : this.no = this.step%8+1;
-		console.log(this.step)
+		// console.log(this.step)
+		console.log(this.no);
 		if(this.step == this.quickerIndex){
 			clearInterval(this.timer);
 			this.o.speed /= 2;
@@ -114,10 +120,11 @@ function LuckyDraw(o) {
 			clearInterval(this.timer);
 			this.clearStyle(this.no);
 			this.chooseStyle(this.chooseIndex);
-			console.log($('.item'+this.chooseIndex).attr('title'));
+			console.log($('.item'+this.chooseIndex).attr('title'));//中奖情况
+			this.success.call(this,arguments)
 			this.flag = true;
-			$('.btn-begin').css("cursor","pointer")
-			$('.btn-begin').css("background-image","url(images/btn-begin.png)")
+			$('.btn-begin').css("cursor","pointer");
+			$('.btn-begin').css("background-image","url(images/btn-begin.png)");
 		}
 	}
 	 /**
@@ -139,8 +146,7 @@ function LuckyDraw(o) {
 	this.begin = function(){
         if(this.o.chance < 1){
             console.log('抽奖机会已用完！');
-            $('.btn-begin').css("cursor","not-allowed")
-	        $('.btn-begin').css("background-image","url(images/btn-begin-grey.png)")//抽奖按钮变灰
+            this.endStyle();
         }
         else{
         	if(this.flag == false){
@@ -153,8 +159,7 @@ function LuckyDraw(o) {
 	        if(this.flag == true){
 	        	this.flag = false;
 	        	luckyDraw.init();
-	        	$('.btn-begin').css("cursor","not-allowed")
-	        	$('.btn-begin').css("background-image","url(images/btn-begin-grey.png)")//抽奖按钮变灰	        	this.flag = false;
+	        	this.endStyle();
 	        }
 	        this.o.chance --;
         }
