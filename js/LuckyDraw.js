@@ -26,34 +26,41 @@ function LuckyDraw(o) {
 		chance: o.chance,//抽奖机会数
 		index: o.index,//初始位置
 	};
-	this.flag = false;//结束转动标志
+	this.flag = true;//结束转动标志
 	this.chooseIndex = 3;//获奖位置编号，随机产生
 	this.step = 0;//步数
+	this.stepAll = 0;//总不步数
 	this.no = 1; //转动过程中位置
+	this.quickerIndex = 6; //加速位置
+	this.slowerIndex = 7; //减速位置
+	this.timer = null;//
 	// Block.call(this);
 	this.success = function(){}//成功后回调函数
-	this.move = function() {
-		let timer = setInterval( () => {
-			this.addStyle(this.no);//添加高亮
-			this.clearStyle(this.no);//去除高亮
-		},this.o.speed)
-		this.step ++;//步数+1
-		this.no = step%8;
-	}
 	this.endMove = function(){
 		clearInterval(timer);
 	}
 	this.setSpeed = function(no){
 		if(no>8){
 			this.o.speed = 100;
-			console.log(no)
+			// console.log(no)
 		}
 	}
 	this.addStyle = function(no){
 		$('.item'+no).addClass('Highlight');
 	}
 	this.clearStyle = function(no){
-		$('.item'+(no-1)).removeClass('Highlight');
+		if(no == 1){
+			$('.item'+8).removeClass('Highlight');
+		}
+		else{
+			$('.item'+(no-1)).removeClass('Highlight');
+		}
+	}
+	this.chooseStyle = function(chooseIndex){
+		$('.item'+chooseIndex).addClass('Selected');
+	}
+	this.clearChooseStyle = function(chooseIndex){
+		$('.item'+chooseIndex).removeClass('Selected');
 	}
 	this.getRandom = function(){
 		let ran = Math.floor(Math.random()*this.o.sum);
@@ -85,31 +92,80 @@ function LuckyDraw(o) {
 			return this.chooseIndex = noprize;
 		}
 	}
+	this.move = function() {
+		this.addStyle(this.no);//添加高亮
+		this.clearStyle(this.no);//去除高亮
+		this.step ++;//步数+1
+		// if(this.step%8 == 0){
+		// 	this.no = 1;
+		// }
+		(this.step%8 == 0) ? this.no = 1 : this.no = this.step%8+1;
+		// else{
+		// 	this.no = this.step%8+1;
+		// }
+		console.log(this.step)
+		if(this.step == this.quickerIndex){
+			clearInterval(this.timer);
+			this.o.speed /= 2;
+			this.timer = setInterval(()=>{
+				this.move();
+			},this.o.speed)
+		}
+		if(this.stepAll-this.step == this.slowerIndex){
+			clearInterval(this.timer);
+			this.o.speed *= 2;
+			this.timer = setInterval(()=>{
+				this.move();
+			},this.o.speed)
+		}
+		if(this.step == this.stepAll){
+			this.step = 0;
+			clearInterval(this.timer);
+			this.clearStyle(this.no);
+			this.chooseStyle(this.chooseIndex);
+			console.log($('.item'+this.chooseIndex).attr('title'));
+			this.flag = true;
+			$('.btn-begin').css("cursor","pointer")
+		}
+	}
 	 /**
-     *@function : 抽奖类的初始化操作
+     *@function : 初始化函数
      **/
 	this.init = function(){
+		this.flag = false;
+		this.clearChooseStyle(this.chooseIndex);
 		this.getRandom();
-		let timer = setInterval( () => {
+		this.stepAll = this.chooseIndex+this.o.round*8; //计算总步数
+		console.log('stepAll',this.stepAll);
+		console.log('chooseIndex',this.chooseIndex);
+		this.timer = setInterval( () => {
 			this.move();
 		},this.o.speed)
 	}
-
+	//开始抽奖
+	this.begin = function(){
+        if(this.o.chance < 1){
+            alert('抽奖机会已用完！');
+        }
+        else{
+        	if(this.flag == false){
+            	$('.btn-begin').css("cursor","pointer")
+	        }
+	        if(this.flag == true){
+	        	luckyDraw.init();
+	        	$('.btn-begin').css("cursor","wait")
+	        }
+	        this.o.chance --;
+        }
+	}
+	//外部调用函数
+	this.run = function(){
+		 $('.btn-begin').click(()=>{
+       		 luckyDraw.begin();
+   		 });
+	}
 }
-LuckyDraw.prototype.getResult = function() {
-	alert(this.o)
-};
 inherit(LuckyDraw, Block);
-var luckyDraw = new LuckyDraw({
-	round:8,
-	sum:1000,
-	speed:300,//初始速度
-});
-console.log(luckyDraw)
-//开始
-function begin() {
-	// luckyDraw.move();
-	luckyDraw.init();
-}
+
 
 

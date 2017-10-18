@@ -21,9 +21,18 @@
         <div class="item7" title="感谢参与"><img src="images/item5.png"></div>
         <div class="item8" title="四等奖"><img src="images/item4.png"></div>
         <!-- }   -->
-        <div class="btn-begin" onclick="begin()">开始抽奖</div>
+        <div class="btn-begin">开始抽奖</div>
     </div>
 </div>
 <script type="text/javascript" src="js/LuckyDraw.js"></script>
+<script type="text/javascript">
+    var luckyDraw = new LuckyDraw({
+        round:2,
+        sum:1000,
+        speed:300,//初始速度
+        chance:3
+    });
+    luckyDraw.run();
+</script>
 </body>
 </html>
