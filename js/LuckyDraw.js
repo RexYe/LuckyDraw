@@ -16,15 +16,14 @@ function LuckyDraw(o) {
 		slowerIndex1: o.slowerIndex1 || 8,//第一次减速位置(倒数),若未输入则默认为8
 		slowerIndex2: o.slowerIndex2 || 4,//第二次减速位置(倒数),若未输入则默认为4
 	};
-	var storage = window.localStorage;
-	if(!window.localStorage){
-        alert("浏览器不支持localStorage!");
-        throw new Error;
-        return false;
-    }
-    else{
-  		
-    }
+	// var storage = window.localStorage;
+	// if(!window.localStorage){
+ //        alert("浏览器不支持localStorage!");
+ //        throw new Error;
+ //        return false;
+ //    }
+ //    else{
+ //    }
 	this.flag = true;//结束转动标志，true代表抽奖结束，false代表抽奖中
 	this.chooseIndex = 0;//获奖位置编号，根据概率随机产生
 	this.step = 0;//转动中的实时步数
@@ -68,9 +67,6 @@ function LuckyDraw(o) {
 	this.removeEndStyle = function() {
 		$('.btn-begin').css("cursor","pointer");
 		$('.btn-begin').css("background-image","url(images/btn-begin.png)");
-	}
-	this.newDom = function(){
-
 	}
 	//随机算法，其概率根据输入的总抽奖份数计算
 	this.getRandom = function() {
