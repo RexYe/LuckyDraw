@@ -6,13 +6,13 @@
 ##### 首先引入库相关的.css .js文件
 
 ##### src文件夹下
-````
+```javascript
 <link href="css/style.css" rel="stylesheet" />
 <script src="https://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js"></script>
 <script type="text/javascript" src="js/LuckyDraw.js"></script>
-````
+```
 # 初始化
-````
+```javascript
 var luckyDraw = new LuckyDraw({
     round:6,//圈数
     sum:1000, //总份数
@@ -27,10 +27,10 @@ var luckyDraw = new LuckyDraw({
     slowerIndex1:8,//第一次减速位置(倒数),若未输入则默认为8
     slowerIndex2:4,//第二次减速位置(倒数),若未输入则默认为4
 });
-````
+```
 # 调用方法
-````
+```javascript
 $('body').append(LuckyDrawNode);//在需要此插件的地方插入LuckyDrawNode节点
 
 luckyDraw.run();//调用run方法
-````
+```
