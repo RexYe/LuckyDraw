@@ -18,27 +18,34 @@ function LuckyDraw(o) {
 	};
 	// var storage = window.localStorage;
 	// if(!window.localStorage){
- //        alert("浏览器不支持localStorage!");
- //        throw new Error;
- //        return false;
- //    }
- //    else{
- //    }
-	this.flag = true;//结束转动标志，true代表抽奖结束，false代表抽奖中
+	// 	alert("浏览器不支持localStorage!");
+	// 	throw new Error;
+	// 	return false;
+	// }
+	// else{
+
+	// }
+	this.flag = true;//结束转动标志，true代表抽奖结束，false代表正在抽奖中
 	this.chooseIndex = 0;//获奖位置编号，根据概率随机产生
 	this.step = 0;//转动中的实时步数
 	this.stepAll = 0;//全程总步数
 	this.no = 1; //转动过程中的实时位置
 	this.timer = null;//定时器
-	//抽奖完成后回调函数
+	/**
+     *@function : 抽奖完成后回调函数
+     **/
 	this.finshCallBack = function(e) {
 		console.log(e);
 	}
-	//增加高亮css状态
+	/**
+     *@function : 增加高亮css状态
+     **/
 	this.addStyle = function(no) {
 		$('.item'+no).addClass('Highlight');
 	}
-	//清除高亮css状态
+	/**
+     *@function : 清除高亮css状态
+     **/
 	this.clearStyle = function(no) {
 		if(no == 1){
 			//一个循环结束后将第8个高亮状态消除
@@ -49,63 +56,75 @@ function LuckyDraw(o) {
 			$('.item'+(no-1)).removeClass('Highlight');
 		}
 	}
-	//中奖选中css状态
+	/**
+     *@function : 中奖选中时css状态
+     **/
 	this.chooseStyle = function(chooseIndex) {
 		$('.item'+chooseIndex).addClass('Selected');
 	}
-	//清除中奖选中css状态
+	/**
+     *@function : 清除中奖选中css状态
+     **/
 	this.clearChooseStyle = function(chooseIndex) {
 		$('.item'+chooseIndex).removeClass('Selected');
 		$('.item'+chooseIndex).stop();//停止动画效果
 	}
-	//抽奖期间样式变灰css状态
+	/**
+     *@function : 抽奖期间样式变灰css状态
+     **/
 	this.endStyle = function() {
 		$('.btn-begin').css("cursor","not-allowed");//鼠标指针变为禁止状态
 	    $('.btn-begin').css("background-image","url(images/btn-begin-grey.png)")//抽奖按钮变灰
 	}
-	//抽奖结束后样式复原
+	/**
+     *@function : 抽奖结束后样式复原函数
+     **/
 	this.removeEndStyle = function() {
 		$('.btn-begin').css("cursor","pointer");
 		$('.btn-begin').css("background-image","url(images/btn-begin.png)");
 	}
-	//随机算法，其概率根据输入的总抽奖份数计算
+	/**
+     *@function : 随机算法，其概率根据输入的总抽奖份数计算
+     **/
 	this.getRandom = function() {
-		let ran = Math.floor(Math.random()*this.o.sum);
+		let ran = Math.floor(Math.random() * this.o.sum);
 		let q1 = this.o.firstPrize;
 		let q2 = this.o.secondPrize;
 		let q3 = this.o.thirdPrize;
 		let q4 = this.o.fourthPrize;
-		if(ran<q1){
+		if(ran < q1){
 			return this.chooseIndex = 2;//一等奖位置
 		}
-		else if(ran>q1-1 && ran<q1+q2){
+		else if(ran > q1-1 && ran < q1+q2){
 			return this.chooseIndex = 4;//二等奖位置
  		}
-		else if(ran>q1+q2-1 && ran<q1+q2+q3){
+		else if(ran > q1+q2-1 && ran < q1+q2+q3){
 			return this.chooseIndex = 6;//三等奖位置
 		}
-		else if(ran>q1+q2+q3-1 && ran<q1+q2+q3+q4){
+		else if(ran > q1+q2+q3-1 && ran < q1+q2+q3+q4){
 			return this.chooseIndex = 8;//四等奖位置
 		}
 		else{
 			//若未中奖，则随机产生1 3 5 7位置
-			let ran2 = Math.ceil(Math.random()*7);
+			let ran2 = Math.ceil(Math.random() * 7);
 			if(ran2%2 === 0){
 				ran2 += 1;
 			}
-			if(ran2>7){
+			if(ran2 > 7){
 				ran2 -= 1;
 			}
 			let noprize = ran2;//位置1 3 5 7均为谢谢参与
 			return this.chooseIndex = noprize;
 		}
 	}
-	//抽奖过程动态效果
+	/**
+     *@function : 抽奖过程动态效果执行函数
+     **/
 	this.move = function() {
 		this.addStyle(this.no);//添加高亮
 		this.clearStyle(this.no);//去除高亮
 		this.step ++;//步数递增
-		(this.step%8 == 0) ? this.no = 1 : this.no = this.step%8+1;//8步一个循环
+		(this.step%8 == 0) ? this.no = 1 : this.no = this.step%8+1;//8步一个循环，控制no值
 		//在用户输入的第一次加速的地方变快
 		if(this.step == this.o.quickerIndex1){
 			clearInterval(this.timer);
@@ -141,7 +160,6 @@ function LuckyDraw(o) {
 		//当实时步数与总步数相等时，为中奖位置
 		if(this.step == this.stepAll){
 			var div=$(".item"+this.chooseIndex).find("img");
-			console.log(div.width);
    		 	for(let i=0 ; i<2 ; i++){
 	   		  	div.animate({opacity:'0.8',width:'310px',height:'260px'},"slow");
 			  	div.animate({opacity:'1'},"slow");
@@ -180,14 +198,14 @@ function LuckyDraw(o) {
 		this.clearStyle(this.chooseIndex);
 		this.getRandom();
 		this.stepAll = this.chooseIndex+this.o.round*8; //计算总步数
-		console.log('stepAll',this.stepAll);
-		console.log('chooseIndex',this.chooseIndex);
 		this.timer = setInterval( () => {
 			this.move();
 		},this.o.speed)
 		this.o.sum -- ;
 	}
-	//开始抽奖
+	/**
+     *@function : 开始抽奖函数
+     **/
 	this.begin = function(){
         if(this.o.chance < 1){
             alert('抽奖机会已用完！');
@@ -210,7 +228,9 @@ function LuckyDraw(o) {
 	        this.o.chance --;
         }
 	}
-	//外部调用函数
+	/**
+     *@function : 暴露给外部调用的函数
+     **/
 	this.run = function(){
 		 $('.btn-begin').click(()=>{
        		luckyDraw.begin();
@@ -222,15 +242,16 @@ function LuckyDraw(o) {
    		});
 	}
 }
+//生产dom节点
 $('body').append('<h1>九宫格幸运抽奖</h1>');
 LuckyDrawNode = $('<div class="wrap-bg"></div>').html('<div class="wrap">'+
-		'<div class="item1" title="感谢参与"><img src="images/item5.png"></div>'+
-		'<div class="item2" title="一等奖"><img src="images/item1.png"></div>'+
-		'<div class="item3" title="感谢参与"><img src="images/item5.png"></div>'+
-		'<div class="item4" title="二等奖"><img src="images/item2.png"></div>'+
-		'<div class="item5" title="感谢参与"><img src="images/item5.png"></div>'+
-		'<div class="item6" title="三等奖"><img src="images/item3.png"></div>'+
-		'<div class="item7" title="感谢参与"><img src="images/item5.png"></div>'+
-		'<div class="item8" title="四等奖"><img src="images/item4.png"></div>'+
-		'<div class="btn-begin">开始抽奖</div>'+
-		+'</div>');
+	'<div class="item1" title="感谢参与"><img src="images/item5.png"></div>'+
+	'<div class="item2" title="一等奖"><img src="images/item1.png"></div>'+
+	'<div class="item3" title="感谢参与"><img src="images/item5.png"></div>'+
+	'<div class="item4" title="二等奖"><img src="images/item2.png"></div>'+
+	'<div class="item5" title="感谢参与"><img src="images/item5.png"></div>'+
+	'<div class="item6" title="三等奖"><img src="images/item3.png"></div>'+
+	'<div class="item7" title="感谢参与"><img src="images/item5.png"></div>'+
+	'<div class="item8" title="四等奖"><img src="images/item4.png"></div>'+
+	'<div class="btn-begin">开始抽奖</div>'+
+	+'</div>');

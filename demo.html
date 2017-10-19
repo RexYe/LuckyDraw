@@ -3,13 +3,11 @@
 <head lang="en">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>九宫格抽奖Demo</title>
+    <title>九宫格抽奖Demo示例</title>
     <link href="css/style.css" rel="stylesheet" />
     <script src="https://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js"></script>
 </head>
 <body>
-<div class="demo">
-</div>
 <script type="text/javascript" src="js/LuckyDraw.js"></script>
 <script type="text/javascript">
     var luckyDraw = new LuckyDraw({
@@ -26,8 +24,8 @@
         slowerIndex1:8,//第一次减速位置(倒数),若未输入则默认为8
         slowerIndex2:4,//第二次减速位置(倒数),若未输入则默认为4
     });
-    $('body').append(LuckyDrawNode);
-    luckyDraw.run();
+    $('body').append(LuckyDrawNode);//在需要此插件的地方插入LuckyDrawNode节点
+    luckyDraw.run();//调用run方法
 </script>
 </body>
 </html>
