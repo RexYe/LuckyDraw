@@ -1,5 +1,15 @@
 //命名空间
 var qlcomponents = qlcomponents || {};
+//localStorage存储抽奖信息，关闭页面仍保留
+var storage = window.localStorage;
+if (!window.localStorage) {
+    alert("浏览器不支持localStorage!");
+    throw new Error;
+    return false;
+}
+else{
+    // var oldPrize = [this.o.firstPrize,this.o.secondPrize,this.o.thirdPrize,this.o.fourthPrize];
+}
 //构造函数、属性
 qlcomponents.LuckyDraw = function (opt_html) {
     this._model = {};
@@ -20,16 +30,7 @@ qlcomponents.LuckyDraw = function (opt_html) {
         slowerIndex1: 8,//第一次减速位置(倒数),若未输入则默认为8
         slowerIndex2: 4,//第二次减速位置(倒数),若未输入则默认为4
     };
-    //localStorage存储抽奖信息，关闭页面仍保留
-    // var storage = window.localStorage;
-    // if(!window.localStorage){
-    //  alert("浏览器不支持localStorage!");
-    //  throw new Error;
-    //  return false;
-    // }
-    // else{
 
-    // }
     this.flag = true;//结束转动标志，true代表抽奖结束，false代表正在抽奖中
     this.chooseIndex = 0;//获奖位置编号，根据概率随机产生
     this.step = 0;//转动中的实时步数
@@ -98,16 +99,16 @@ qlextent.extendClass(qlcomponents.LuckyDraw, {
      *@function : 中奖选中时css状态
      **/
     chooseStyle: function (chooseIndex) {
-        this._model.getData()[chooseIndex].setIsSelect(true);
-        // $('.item'+chooseIndex).addClass('Selected');
+        // this._model.getData()[chooseIndex].setIsSelect(true);
+        $('.item'+chooseIndex).addClass('Selected');
     },
     /**
      *@function : 清除中奖选中css状态
      **/
     clearChooseStyle: function (chooseIndex) {
-        this._model.getData()[chooseIndex].setIsSelect(false);
-        // $('.item'+chooseIndex).removeClass('Selected');
-        // $('.item'+chooseIndex).stop();//停止动画效果
+        // this._model.getData()[chooseIndex].setIsSelect(false);
+        $('.item'+chooseIndex).removeClass('Selected');
+        $('.item'+chooseIndex).stop();//停止动画效果
     },
     /**
      *@function : 抽奖期间样式变灰css状态
@@ -199,6 +200,7 @@ qlextent.extendClass(qlcomponents.LuckyDraw, {
         }
         //当实时步数与总步数相等时，为中奖位置
         if (this.step == this.stepAll) {
+
             var div=$(".item"+this.chooseIndex).find("img");
             for (let i=0 ; i<2 ; i++) {
                 div.animate({opacity:'0.8',width:'310px',height:'260px'},"slow");
@@ -209,15 +211,19 @@ qlextent.extendClass(qlcomponents.LuckyDraw, {
             //若某项中奖后，该项的次数须减一
             if (this.chooseIndex == 2) {
                 this.o.firstPrize --;
+                storage.prizeInfo.first ++;
             }
             if (this.chooseIndex == 4) {
                 this.o.secondPrize --;
+                storage.prizeInfo.second ++;
             }
             if (this.chooseIndex == 6) {
                 this.o.thirdPrize --;
+                storage.prizeInfo.third ++;
             }
             if (this.chooseIndex == 8) {
                 this.o.fourthPrize --;
+                storage.prizeInfo.fourth ++;
             }
             this.clearStyle(this.no);//高亮状态清除
             this.chooseStyle(this.chooseIndex);//并且该项增加选中状态
